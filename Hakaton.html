@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>РунаПисьмо — цифровое возрождение древнетюркских рун</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background: linear-gradient(160deg, #1a1410 0%, #2c2016 30%, #1f180e 70%, #0f0c08 100%);
+            font-family: 'Segoe UI', 'Roboto', 'Noto Sans', system-ui, -apple-system, 'Georgia', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 24px 16px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image:
+                radial-gradient(ellipse at 20% 50%, rgba(180, 150, 100, 0.04) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(200, 160, 80, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(160, 120, 60, 0.04) 0%, transparent 50%);
+            opacity: 0.8;
+        }
+
+        .tool-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            width: 100%;
+            background: linear-gradient(180deg, #fdf0db 0%, #f8e8cc 30%, #fef3db 60%, #f5e3c4 100%);
+            background-image:
+                radial-gradient(circle at 15% 25%, rgba(200, 160, 100, 0.08) 1%, transparent 2%),
+                radial-gradient(circle at 85% 75%, rgba(180, 140, 80, 0.06) 1%, transparent 2%),
+                radial-gradient(circle at 50% 50%, rgba(210, 180, 130, 0.04) 2%, transparent 3%);
+            background-size: 32px 32px, 40px 40px, 24px 24px;
+            border-radius: 64px 64px 52px 52px;
+            box-shadow:
+                0 30px 60px rgba(0, 0, 0, 0.6),
+                0 8px 16px rgba(0, 0, 0, 0.4),
+                inset 0 2px 4px rgba(255, 250, 240, 0.9),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.05);
+            padding: 28px 32px 36px;
+            transition: all 0.3s ease;
+        }
+
+        .ornament {
+            height: 60px;
+            background-color: #e8d5b0;
+            background-image:
+                repeating-linear-gradient(45deg, #b8945c 0px, #b8945c 2px, transparent 2px, transparent 12px),
+                repeating-linear-gradient(-45deg, #b8945c 0px, #b8945c 2px, transparent 2px, transparent 12px),
+                repeating-linear-gradient(45deg, #c9a66b 0px, #c9a66b 1px, transparent 1px, transparent 12px),
+                repeating-linear-gradient(-45deg, #c9a66b 0px, #c9a66b 1px, transparent 1px, transparent 12px);
+            background-position: 0 0, 0 0, 6px 0, 6px 0;
+            background-size: 24px 24px;
+            margin-bottom: 24px;
+            border-radius: 8px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(180, 140, 80, 0.3);
+        }
+
+        .title-section {
+            text-align: center;
+            border-bottom: 2px solid rgba(180, 140, 90, 0.5);
+            margin-bottom: 28px;
+            padding-bottom: 14px;
+            position: relative;
+        }
+
+        .title-section::after {
+            content: '◆';
+            position: absolute;
+            bottom: -7px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #b8945c;
+            font-size: 12px;
+            background: #fdf0db;
+            padding: 0 10px;
+        }
+
+        h1 {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 2.5rem;
+            margin: 0;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #6b3a1f, #8b5a30, #4a2010);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.08);
+            font-weight: bold;
+        }
+
+        .sub {
+            font-size: 0.9rem;
+            color: #5a3e28;
+            background: rgba(230, 210, 180, 0.7);
+            display: inline-block;
+            padding: 5px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            margin-top: 10px;
+            letter-spacing: 1px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .rune-display-area {
+            background: linear-gradient(180deg, #2a241c 0%, #1f1a12 100%);
+            border-radius: 36px;
+            padding: 22px 26px;
+            margin-bottom: 28px;
+            box-shadow:
+                inset 0 0 0 2px rgba(100, 80, 50, 0.6),
+                0 14px 24px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            position: relative;
+        }
+
+        .rune-text-container {
+            background: linear-gradient(180deg, #fef8ef 0%, #fdf3e4 100%);
+            border-radius: 28px;
+            padding: 18px 22px;
+            min-height: 100px;
+            direction: rtl;
+            font-size: 2.2rem;
+            font-family: 'Noto Sans Old Turkic', 'Segoe UI Historic', 'Noto Sans', 'Ebrima', 'FreeSerif', serif;
+            line-height: 1.5;
+            word-break: break-word;
+            white-space: pre-wrap;
+            color: #2e241b;
+            letter-spacing: 2px;
+            border: 1px solid rgba(200, 170, 120, 0.5);
+            box-shadow:
+                inset 0 2px 6px rgba(0, 0, 0, 0.06),
+                0 2px 4px rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        #runeOutput {
+            min-height: 80px;
+            outline: none;
+            transition: color 0.4s ease;
+        }
+
+        #runeOutput.placeholder-text {
+            color: #bbb;
+            font-style: italic;
+        }
+
+        .translation-block {
+            background: linear-gradient(135deg, #efe0ca 0%, #e5d5ba 100%);
+            border-radius: 24px;
+            padding: 14px 22px;
+            margin-top: 16px;
+            direction: ltr;
+            text-align: left;
+            font-size: 0.95rem;
+            color: #2c2418;
+            border-left: 6px solid #b87c42;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .translation-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #8b6946;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #translationText {
+            font-family: 'Segoe UI', 'Roboto', 'Noto Sans', sans-serif;
+            word-break: break-word;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .info-hint {
+            direction: ltr;
+            text-align: right;
+            font-size: 0.8rem;
+            margin-top: 12px;
+            color: #e5d5bb;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copy-notify {
+            background: #a5713c;
+            padding: 4px 14px;
+            border-radius: 60px;
+            font-size: 0.75rem;
+            color: #f9eec1;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-bar {
+            display: flex;
+            gap: 14px;
+            justify-content: flex-end;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .action-btn {
+            background: linear-gradient(180deg, #f0e6d4 0%, #e0cfb0 100%);
+            border: 1px solid rgba(180, 140, 90, 0.4);
+            padding: 10px 22px;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            color: #3b2a1c;
+            letter-spacing: 0.5px;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(180deg, #e8dcc5 0%, #d4c09a 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        .action-btn:active {
+            background: #c9b48a;
+            transform: translateY(1px);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .keyboard {
+            background: linear-gradient(180deg, #e0caa8 0%, #cfb88e 100%);
+            border-radius: 48px;
+            padding: 22px 20px;
+            box-shadow:
+                inset 0 2px 6px rgba(255, 255, 255, 0.4),
+                0 12px 24px rgba(0, 0, 0, 0.35);
+            margin-top: 14px;
+            border: 1px solid rgba(180, 140, 80, 0.3);
+        }
+
+        .key-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+            gap: 5px;
+        }
+
+        .key {
+            background: linear-gradient(180deg, #4a3d2e 0%, #2e2419 100%);
+            color: #ffefcf;
+            border-radius: 22px;
+            padding: 12px 6px;
+            min-width: 78px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.08s linear;
+            box-shadow: 0 6px 0 #120d07, 0 2px 4px rgba(0, 0, 0, 0.5);
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.3;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .key:hover {
+            background: linear-gradient(180deg, #5a4d3e 0%, #3a2f24 100%);
+            box-shadow: 0 7px 0 #120d07, 0 3px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .key:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #120d07, 0 1px 2px rgba(0, 0, 0, 0.5);
+            transition: all 0.04s linear;
+        }
+
+        .key-rune-char {
+            font-size: 1.7rem;
+            font-family: 'Noto Sans Old Turkic', 'Segoe UI Historic', monospace;
+            margin-bottom: 5px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .key-letter-char {
+            font-size: 0.85rem;
+            background: rgba(80, 60, 40, 0.6);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-family: monospace;
+            font-weight: bold;
+            text-transform: lowercase;
+            letter-spacing: 1px;
+        }
+
+        .special-key {
+            background: linear-gradient(180deg, #c99550 0%, #a07238 100%);
+            min-width: 90px;
+            box-shadow: 0 6px 0 #5a3d20, 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .special-key:hover {
+            background: linear-gradient(180deg, #d4a560 0%, #b08040 100%);
+        }
+
+        .space-key {
+            min-width: 220px;
+            background: linear-gradient(180deg, #6b5a40 0%, #4a3a25 100%);
+            box-shadow: 0 6px 0 #1f180e, 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .keyboard-caption {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.7rem;
+            color: #2f281b;
+            font-weight: bold;
+            background: rgba(235, 221, 196, 0.7);
+            display: inline-block;
+            width: auto;
+            padding: 5px 18px;
+            border-radius: 60px;
+            letter-spacing: 1px;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 30px;
+            color: #a8906f;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="tool-container">
+        <div class="ornament"></div>
+        <div class="title-section">
+            <h1>✨ 𐰼𐰇𐰤 𐰖𐰀𐰕𐰍𐰆 ✨<br>РунаПисьмо</h1>
+        </div>
+
+        <div class="rune-display-area">
+            <div class="rune-text-container">
+                <div id="runeOutput" style="direction: rtl; unicode-bidi: embed;">𐰀𐰃𐰆𐰭</div>
+            </div>
+            <div class="translation-block">
+                <div class="translation-label">
+                    <span>📜 ПЕРЕВОД НА РУССКИЙ</span>
+                </div>
+                <div id="translationText">—</div>
+            </div>
+            <div class="info-hint">
+                <span>✍️ Направление письма: <strong>справа налево</strong></span>
+                <span class="copy-notify" id="copyToast" style="opacity:0;">✓ скопировано</span>
+            </div>
+        </div>
+
+        <div class="action-bar">
+            <button class="action-btn" id="exampleBtn">Пример (Орхон)</button>
+            <button class="action-btn" id="copyBtn">Копировать</button>
+            <button class="action-btn" id="clearBtn">Очистить всё</button>
+            <button class="action-btn" id="backBtn">Стереть</button>
+        </div>
+
+        <div class="keyboard">
+            <div class="key-row" id="keyboardRow1"></div>
+            <div class="key-row" id="keyboardRow2"></div>
+            <div class="key-row" id="keyboardRow3"></div>
+            <div class="key-row">
+                <div class="key special-key space-key" id="spaceKeyBtn">ПРОБЕЛ</div>
+            </div>
+            <div class="keyboard-caption">Набирайте текст клавиатурой или нажимайте на кнопки</div>
+        </div>
+        <footer>𐱅𐰇𐰼𐰜 𐰉𐰆𐰑𐰣 — 𐰉𐰃𐰠𐰏𐰀 | Основано на фонетических соответствиях орхоно-енисейским рунам</footer>
+    </div>
+
+    <script>
+        const rusToRune = new Map([
+            ['а', '𐰀'], ['б', '𐰉'], ['в', '𐰉'], ['г', '𐰍'], ['д', '𐰑'],
+            ['е', '𐰅'], ['ё', '𐰅'], ['ж', '𐰕'], ['з', '𐰔'], ['и', '𐰃'],
+            ['й', '𐰘'], ['к', '𐰚'], ['л', '𐰞'], ['м', '𐰢'], ['н', '𐰤'],
+            ['о', '𐰆'], ['п', '𐰯'], ['р', '𐰺'], ['с', '𐰽'], ['т', '𐱅'],
+            ['у', '𐰆'], ['ф', '𐰯'], ['х', '𐰴'], ['ц', '𐰲'], ['ч', '𐰲'],
+            ['ш', '𐰾'], ['щ', '𐰾𐰾'], ['ъ', ''], ['ы', '𐰃'], ['ь', ''],
+            ['э', '𐰅'], ['ю', '𐰖𐰆'], ['я', '𐰖𐰀']
+        ]);
+
+        function convertRussianToRunes(inputStr) {
+            let result = '';
+            for (let i = 0; i < inputStr.length; i++) {
+                let ch = inputStr[i];
+                if (ch === ' ') { result += ' '; continue; }
+                if (/[0-9.,!?;:()\-–—\[\]{}<>/\\|`~@#$%^&*+=]/.test(ch)) { result += ch; continue; }
+                if (/[а-яё]/.test(ch)) {
+                    let rune = rusToRune.get(ch);
+                    result += (rune !== undefined) ? rune : ch;
+                } else { result += ch; }
+            }
+            return result;
+        }
+
+        function getRussianTranslation(russianRaw) {
+            if (!russianRaw || russianRaw.trim() === '') return "—";
+            const dict = {
+                "кюль тегин": "Кюль-Тегин (принц, великий воин)",
+                "бильге каган": "Бильге-каган (мудрый правитель)",
+                "тоньюкук": "Тоньюкук (мудрый советник)",
+                "тенгри": "Тенгри (Вечное Небо)",
+                "тюрк": "тюркский народ",
+                "руна": "руна", "руны": "руны",
+                "добро": "добро, благо", "пожаловать": "приветствовать",
+                "мир": "мир, вселенная", "солнце": "солнце (Күн)", "небо": "небо (Тенгри)",
+                "земля": "земля (Йер-Суб)", "волк": "волк (Бөрі)", "конь": "конь (Йылкы)",
+                "воин": "воин (Багатур)", "каган": "каган (верховный правитель)",
+                "степь": "степь (Кыр)", "отец": "отец (Ата)", "мать": "мать (Ана)",
+                "сын": "сын (Оглан)", "дочь": "дочь (Кыз)", "народ": "народ (Бодун)",
+                "язык": "язык (Тил)", "письмо": "письменность (Языг)",
+                "память": "память (Эс)", "история": "история (Битіг)",
+                "стела": "каменная стела", "надпись": "надпись (Бітіг)",
+                "рунаписьмо": "РунаПисьмо — цифровой инструмент"
+            };
+            let lowerText = russianRaw.toLowerCase();
+            let translationParts = [];
+            let words = lowerText.split(/\s+/);
+            for (let w of words) {
+                if (w.length === 0) continue;
+                if (dict[w]) translationParts.push(dict[w]);
+                else if (w.length > 2 && dict[w.slice(0, -1)]) translationParts.push(dict[w.slice(0, -1)] + (w.endsWith('и') ? ' (мн.ч.)' : ''));
+                else translationParts.push(`«${w}»`);
+            }
+            let baseTranslation = translationParts.join(' ');
+            if (lowerText.includes("кюль тегин") || lowerText.includes("бильге")) return " " + baseTranslation + ". Слава древним воинам Орхона!";
+            if (lowerText.includes("тенгри")) return " " + baseTranslation + " — благословение Вечного Неба.";
+            if (lowerText === "добро пожаловать в рунаписьмо") return " Добро пожаловать в РунаПисьмо! Инструмент для возрождения древнетюркских рун ";
+            if (baseTranslation.length < 50 && baseTranslation !== "—") return " " + baseTranslation;
+            if (lowerText.length > 0 && baseTranslation !== "—") return " Смысл надписи: " + baseTranslation;
+            return " Буквальное отображение: «" + russianRaw + "». Погрузитесь в мир древнетюркской письменности!";
+        }
+        
+        let rawRussianInput = "";
+
+        function updateRuneAndTranslation() {
+            const runeText = convertRussianToRunes(rawRussianInput);
+            const outputDiv = document.getElementById('runeOutput');
+            
+            if (runeText.trim() === '' && rawRussianInput === '') {
+                outputDiv.innerHTML = '𐱅𐰇𐰼𐰜 𐰼𐰇𐰤𐰠𐰼𐰃';
+                outputDiv.classList.add('placeholder-text');
+            } else {
+                outputDiv.innerHTML = runeText === '' ? '' : runeText;
+                outputDiv.classList.remove('placeholder-text');
+            }
+            
+            const translationDiv = document.getElementById('translationText');
+            if (translationDiv) {
+                translationDiv.innerHTML = getRussianTranslation(rawRussianInput);
+            }
+        }
+
+        let toastTimer1, toastTimer2;
+
+        function showToast(msg, duration = 1500, resetToDefault = false) {
+            const toast = document.getElementById('copyToast');
+            if (!toast) return;
+            clearTimeout(toastTimer1);
+            clearTimeout(toastTimer2);
+            toast.textContent = msg;
+            toast.style.opacity = '1';
+            toastTimer1 = setTimeout(() => {
+                toast.style.opacity = '0';
+                if (resetToDefault) {
+                    toastTimer2 = setTimeout(() => {
+                        if (toast) toast.textContent = "скопировано";
+                    }, 500);
+                }
+            }, duration);
+        }
+        
+        function addCharacter(char) {
+            if (/[а-яА-ЯёЁ]/.test(char)) char = char.toLowerCase();
+            if (char === 'ъ' || char === 'ь') {
+                showToast("Увы, такой буквы нет в этом языке", 1800, false);
+                return;
+            }
+            rawRussianInput += char;
+            updateRuneAndTranslation();
+        }
+        
+        function deleteLastChar() {
+            if (rawRussianInput.length === 0) return;
+            rawRussianInput = rawRussianInput.slice(0, -1);
+            updateRuneAndTranslation();
+        }
+        
+        function clearAll() {
+            rawRussianInput = "";
+            updateRuneAndTranslation();
+            showToast("Поле очищено", 1000, false);
+        }
+        
+        function copyToClipboard() {
+            const runesOnly = convertRussianToRunes(rawRussianInput);
+            if (!runesOnly.trim()) {
+                showToast("📭 Нет текста для копирования", 1500, false);
+                return;
+            }
+            navigator.clipboard.writeText(runesOnly).then(() => {
+                showToast("Руны скопированы!", 1800, true);
+            }).catch(() => {
+                showToast("Не удалось скопировать", 1800, false);
+            });
+        }
+        
+        function handlePhysicalKeyboard(e) {
+            const key = e.key;
+            if (key === 'Backspace') { e.preventDefault(); deleteLastChar(); return; }
+            if (key === ' ' || key === 'Space') { e.preventDefault(); addCharacter(' '); return; }
+            if (key === 'Enter') { e.preventDefault(); addCharacter(' '); return; }
+            const isRussian = /[а-яА-ЯёЁ]/.test(key);
+            if (isRussian && key.length === 1) { e.preventDefault(); addCharacter(key); return; }
+            if (key.length === 1 && /[0-9.,!?;:()\-=+[\]{}'"/\\|`~@#$%^&*]/.test(key)) { e.preventDefault(); addCharacter(key); return; }
+            if (key.length === 1 && /[a-zA-Z]/.test(key)) { e.preventDefault(); addCharacter(key); return; }
+        }
+        
+        const row1Chars = ['й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ'];
+        const row2Chars = ['ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э'];
+        const row3Chars = ['я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', 'ё'];
+        
+        function createKeyWithRune(cyrChar) {
+            const runeChar = rusToRune.get(cyrChar) || (cyrChar === 'ъ' ? '␚' : (cyrChar === 'ь' ? '␜' : cyrChar));
+            const keyDiv = document.createElement('div');
+            keyDiv.className = 'key';
+            keyDiv.innerHTML = `
+                <div class="key-rune-char">${runeChar !== '' ? runeChar : ' '}</div>
+                <div class="key-letter-char">${cyrChar}</div>
+            `;
+            keyDiv.addEventListener('click', (e) => {
+                e.stopPropagation();
+                addCharacter(cyrChar);
+            });
+            return keyDiv;
+        }
+        
+        const row1Container = document.getElementById('keyboardRow1');
+        const row2Container = document.getElementById('keyboardRow2');
+        const row3Container = document.getElementById('keyboardRow3');
+        row1Chars.forEach(ch => row1Container.appendChild(createKeyWithRune(ch)));
+        row2Chars.forEach(ch => row2Container.appendChild(createKeyWithRune(ch)));
+        row3Chars.forEach(ch => row3Container.appendChild(createKeyWithRune(ch)));
+        
+        document.getElementById('spaceKeyBtn')?.addEventListener('click', () => addCharacter(' '));
+        document.getElementById('copyBtn')?.addEventListener('click', copyToClipboard);
+        document.getElementById('clearBtn')?.addEventListener('click', clearAll);
+        document.getElementById('backBtn')?.addEventListener('click', deleteLastChar);
+        document.getElementById('exampleBtn')?.addEventListener('click', () => {
+            const examplePhrase = "кюль тегин бильге каган";
+            if (rawRussianInput.length === 0) rawRussianInput = examplePhrase;
+            else rawRussianInput += " " + examplePhrase;
+            updateRuneAndTranslation();
+            showToast("Пример приведён", 1500, false);
+        });
+        
+        window.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 'c' || e.key === 'C' || e.key === 'v' || e.key === 'V') return;
+            }
+            const activeEl = document.activeElement;
+            if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.isContentEditable)) return;
+            handlePhysicalKeyboard(e);
+        });
+        
+        rawRussianInput = "добро пожаловать в рунаписьмо";
+        updateRuneAndTranslation();
+    </script>
+</body>
+</html>
