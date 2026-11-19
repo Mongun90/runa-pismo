@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>РунаПисьмо — цифровое возрождение древнетюркских рун</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Old+Turkic&family=Cormorant+Garamond:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="tool-container">
+        <div class="ornament" aria-hidden="true"></div>
+
+        <header class="title-section">
+            <h1><span class="rune-accent">𐰼𐰇𐰤 𐰖𐰀𐰕𐰍𐰆</span><br>РунаПисьмо</h1>
+            <p class="sub">Цифровое возрождение древнетюркских рун</p>
+        </header>
+
+        <section class="rune-display-area">
+            <div class="rune-text-container">
+                <div id="runeOutput" class="rune-output" dir="rtl" style="unicode-bidi: isolate;" aria-live="polite"></div>
+            </div>
+
+            <div class="translation-block">
+                <div class="translation-label">Перевод на русский</div>
+                <div id="translationText" class="translation-text" aria-live="polite">—</div>
+            </div>
+
+            <div class="info-hint">
+                <span>Направление письма: <strong>справа налево</strong></span>
+                <span class="copy-notify" id="copyToast" role="status" aria-live="polite"></span>
+            </div>
+        </section>
+
+        <section class="action-bar" aria-label="Действия">
+            <button class="action-btn" id="exampleBtn" type="button">Пример (Орхон)</button>
+            <button class="action-btn" id="copyBtn" type="button">Копировать</button>
+            <button class="action-btn" id="backBtn" type="button">Стереть</button>
+            <button class="action-btn" id="clearBtn" type="button">Очистить всё</button>
+        </section>
+
+        <section class="keyboard" aria-label="Виртуальная клавиатура">
+            <div class="key-row" id="keyboardRow1"></div>
+            <div class="key-row" id="keyboardRow2"></div>
+            <div class="key-row" id="keyboardRow3"></div>
+            <div class="key-row">
+                <button class="key special-key space-key" id="spaceKeyBtn" type="button">ПРОБЕЛ</button>
+            </div>
+            <p class="keyboard-caption">Набирайте текст клавиатурой или нажимайте на кнопки</p>
+        </section>
+
+        <footer>
+            𐱅𐰇𐰼𐰜 𐰉𐰆𐰑𐰣 — 𐰉𐰃𐰠𐰏𐰀 | Основано на фонетических соответствиях орхоно-енисейским рунам
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
