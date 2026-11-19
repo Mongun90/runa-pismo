@@ -526,11 +526,72 @@ footer {
 }
 
 @media (max-width: 720px) {
-    .about-section {
-        margin-top: 30px;
-        padding-top: 20px;
+    body {
+        padding: 16px 10px;
+        align-items: flex-start;
     }
-    .about-desc {
-        font-size: 0.9rem;
+
+    .tool-container {
+        padding: 20px 16px 28px;
+        border-radius: 32px;
+    }
+
+    .rune-display-area {
+        padding: 16px;
+        border-radius: 24px;
+    }
+
+    .rune-text-container {
+        padding: 14px 16px;
+    }
+
+    .keyboard {
+        padding: 12px 6px;
+        border-radius: 24px;
+    }
+
+    .key-row {
+        gap: 4px; 
+        margin-bottom: 8px;
+    }
+
+    .key {
+        min-width: 42px;
+        padding: 8px 2px;
+        border-radius: 12px;
+        box-shadow: 0 4px 0 #120d07, 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .key-rune-char {
+        font-size: 1.15rem;
+        margin-bottom: 2px;
+    }
+
+    .key-letter-char {
+        font-size: 0.65rem;
+        padding: 1px 4px;
+    }
+
+    .space-key {
+        min-width: 120px;
+        padding: 8px 2px;
+    }
+
+    .action-bar {
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .action-btn {
+        flex: 1 1 40%;
+        padding: 8px 14px;
+        font-size: 0.85rem;
+        text-align: center;
+    }
+
+    .info-hint {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
     }
 }
