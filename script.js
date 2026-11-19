@@ -101,9 +101,6 @@ function getRussianTranslation(russianRaw) {
     if (lower.includes('тенгри')) {
         return base + ' — благословение Вечного Неба.';
     }
-    if (knownCount === 0) {
-        return `Буквальное отображение: «${trimmed}». Погрузитесь в мир древнетюркской письменности!`;
-    }
     if (base.length < 50) {
         return base;
     }
